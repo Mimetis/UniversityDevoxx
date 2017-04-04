@@ -36,7 +36,7 @@ add the component in the `app.component.html` component html file :
 <app-room></app-room>
 ```
 
-## Step 03 : Call to a service
+## Step 03 : Call to a service in the room component
 
 We make a service in the `/src/app/room.component.ts`. After this step, we will migrate the function service in a real service :)  
 
@@ -67,7 +67,16 @@ getRooms(): Observable<Array<any>> {
 }
 ```
 
-Then create a new service with `ng` command to replace last code in `src/app` :
+To test your function, go to `/src/app/room/room.component.html` and add :
+
+```html
+<div *ngFor='let r of rooms'>
+  <span>{{r.name}}</span>
+</div>
+```
+## Step 04 : Create an Angular service
+
+Create a new service with `ng` command to replace last code in `src/app` :
 
 ```
 ng g service room
