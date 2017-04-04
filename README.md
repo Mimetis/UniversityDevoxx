@@ -84,18 +84,18 @@ Add at the end the <router-outlet> component :
     ...
     ...
     </nav>
+  </div>
   
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
 
-</div>
 ```
 
 And then editing the two links in the nav control : 
 ```html
 <li class="nav-item active">
-  <a class="nav-link" routerLinkActive="active" [routerLink]="['/']">Conferences</a>
+  <a class="nav-link" routerLinkActive="active" [routerLink]="['/schedules']">Conferences</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" routerLinkActive="active" [routerLink]="['/rooms']">Rooms</a>
