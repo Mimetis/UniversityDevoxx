@@ -38,6 +38,8 @@ add the component in the `app.component.html` component html file :
 
 ## Step 03 : Call to a service
 
+We make a service in the `/src/app/room.component.ts`. After this step, we will migrate the function service in a real service :)  
+
 We need to import `Rx` framework to be able to use the `Observable` :
 
 ```javascript
