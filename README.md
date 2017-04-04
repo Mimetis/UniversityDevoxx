@@ -2,107 +2,108 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.
 
-## Demo 03
+## Demo 04
 
-Demo on router integration 
+Publishing to Docker, enable production mode, build
 
-## Step 01 Create a new component
+## Step 01 Building production mode and debug mode
 
-To make a demonstration about how to make `Routes` we will add an empty new component called `schedule`.  
-Go to `/src/app` in your terminal and generate a new component :  
-
-```
-ng g component schedule
-```
-
-## Step 02 Change the app.component.html page
-
-to be able to use a router, we change the `/src/app/app.component.html` file.  This file will act as a **master** page. 
-
-```html
-
-<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <a class="navbar-brand" href="#">Devoxx</a>
-
-  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Conferences</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Rooms</a>
-      </li>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-  </div>
-</nav>
+you can see how production mode works, by building your app.  
+Launch your terminal and make a test :
 
 ```
+ng serve -dev
+```
+the `vendor.bundle.js` file is **3.1Mb**
 
-**Note** We don't use any component in the `app.component.html` file. 
-We will add the correct syntax later to use a router component.  
+```
+ng serve -prod
+```
+the `vendor.bundle.js` file is **230kb**
 
-## Step 03 Create a router 
+Now you can **Build** the final result :
 
-Go to the `/src/app/app.module.ts` and add the correct imports :
+```
+ng build -dev
+```
+```
+ng build -prod
+```
+
+Notice the `/dist` folder is present now and containing your final build folder.
+
+## Step 02 taking care of the environment variables
+
+Editing the environment variables in `/src/environments` folder to be able to switch variables from differents build:   
+
+Editing the `/src/environments/environment.ts` file to handle the `dev` mode : 
+```javascript
+export const environment = {
+  production: false,
+  uriPath: "http://localhost:9292/conference-venue/api"
+};
+```
+
+Editing the `/src/environments/environment.prod.ts` file to handle the `prod` mode : 
+```javascript
+export const environment = {
+  production: true,
+  uriPath: "http://devoxxconference.yourdomain.com/conference-venue/api"
+};
+```
+
+Finally, editing your `/src/app/app.module.ts` file to get the right url in your `BASE_PATH` key :
+Don't forget to import the `environment` class:
 
 ```javascript
-import { Routes, RouterModule } from '@angular/router';
+import { environment } from '../environments/environment';
 ```
-
-Now, add a routes array :  
+and then editing the paths :
 
 ```javascript
-var routes: Routes = [
-  { path: '', redirectTo: '/schedules', pathMatch: 'full' },
-  { path: "schedules", component: ScheduleComponent },
-  { path: "rooms", component: RoomComponent }
-];
+{ provide: BASE_PATH, useValue: environment.uriPath },
+{ provide: "roomServiceUrl", useValue: environment.uriPath }
 ```
 
-Then make the routes available in the RouterModule itself :
+Now, building your solution in `dev` or `prod` mode will change your uri !
 
-```javascript
-imports: [
-  BrowserModule,
-  FormsModule,
-  HttpModule,
-  RouterModule.forRoot(routes)
-],
+
+**Note** If you don't have a production environment and you want to test the `prod` bundle, you can test with this command :  
 ```
-
-We can now editing our `/src/app/app.component.html` to handle correctly the routings paths :
-
-Add at the end the <router-outlet> component :
-```html
-    ...
-    ...
-    </nav>
-  
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>
-
-</div>
+ng serve --prod --env=dev
 ```
+It will generate the `prod` bundle, minified, but will use the `dev` environment variables.
 
-And then editing the two links in the nav control : 
-```html
-<li class="nav-item active">
-  <a class="nav-link" routerLinkActive="active" [routerLink]="['/']">Conferences</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" routerLinkActive="active" [routerLink]="['/rooms']">Rooms</a>
-</li>
+## Step 03 Docker file
+
+Create a new Docker file called `Dockerfile` in root folder `/` and copy paste this commands :
 
 ```
+FROM nginx
 
+MAINTAINER spertus
+
+LABEL name="Conference Web"
+LABEL description="Angular front-end for the conference application"
+LABEL url="http://localhost:80"
+LABEL vendor="@sebastienpertus"
+
+EXPOSE 80
+
+COPY ./dist /usr/share/nginx/html
+```
+
+Build the container image from your terminal in the root folder `/` :  
+
+```
+docker build -t universitydevoxx:latest .
+```
+
+Run it in your environment (I use local port 81 instead of 80)
+
+```
+docker run -d -p 81:80 universitydevoxx:latest
+```
 
 
 ## Further help
