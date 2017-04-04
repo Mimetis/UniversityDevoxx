@@ -1,7 +1,14 @@
-<p>
-  room works!
-</p>
+<div class="body">
+	<h2>Here's a list of Rooms availabe</h2>
 
-<div *ngFor='let r of rooms'>
-  <span>{{r.name}}</span>
+	<ul class="list-group">
+		<a *ngFor="let room of rooms" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+			<div class="d-flex w-100 justify-content-between">
+				<h5 class="mb-1">{{room.name}}</h5>
+				<span class="badge badge-default badge-pill">{{room.capacity}}</span>
+			</div>
+			<p class="mb-1">{{room?.setup}}</p>
+		</a>
+
+	</ul>
 </div>

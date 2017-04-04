@@ -7,6 +7,9 @@ import { AppComponent } from './app.component';
 import { RoomComponent } from './room/room.component';
 import { RoomService } from './room.service';
 
+import { VenueApi, BASE_PATH } from './ms/index';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +22,8 @@ import { RoomService } from './room.service';
   ],
   providers: [
     RoomService,
+    VenueApi,
+    { provide: BASE_PATH, useValue: "http://localhost:9292/conference-venue/api" },
     { provide: "roomServiceUrl", useValue: "http://localhost:9292/conference-venue/api" }
   ],
   bootstrap: [AppComponent]
