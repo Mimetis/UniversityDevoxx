@@ -28,7 +28,14 @@ and the style as well in the `/src/styles.css` :
 
 ```css
 @import '~bootstrap/dist/css/bootstrap.min.css';
+
+body {
+  min-height: 75rem;
+  padding-top: 4.5rem;
+}
 ```
+**Note** the body style is used globally and is not mandatory to include boostrap. We *will* need it when we will use the bootstrap nav bar :)
+
 
 Then edit your `/src/app/room/room.component.html` :  
 
