@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  uriPath: "http://devoxxconference.yourdomain.com/conference-venue/api"
 };

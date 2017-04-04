@@ -11,6 +11,8 @@ import { RoomService } from './room.service';
 import { VenueApi, BASE_PATH } from './ms/index';
 import { ScheduleComponent } from './schedule/schedule.component';
 
+import { environment } from '../environments/environment';
+
 var routes: Routes = [
   { path: '', redirectTo: '/schedules', pathMatch: 'full' },
   { path: "schedules", component: ScheduleComponent },
@@ -33,8 +35,8 @@ var routes: Routes = [
   providers: [
     RoomService,
     VenueApi,
-    { provide: BASE_PATH, useValue: "http://localhost:9292/conference-venue/api" },
-    { provide: "roomServiceUrl", useValue: "http://localhost:9292/conference-venue/api" }
+    { provide: BASE_PATH, useValue: environment.uriPath },
+    { provide: "roomServiceUrl", useValue: environment.uriPath }
   ],
   bootstrap: [AppComponent]
 })
